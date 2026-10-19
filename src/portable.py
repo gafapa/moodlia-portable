@@ -49,6 +49,9 @@ def check_port(port):
     with socket.socket() as server:
         if os.name == 'nt':
             server.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        else:
+            # Match the proxy's restart policy when closed connections remain in TIME_WAIT.
+            server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         server.bind(('127.0.0.1', port))
 
 

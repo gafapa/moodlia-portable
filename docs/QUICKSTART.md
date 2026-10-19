@@ -10,6 +10,8 @@ Open **MoodlIA → Connection files**. `credentials.txt` contains the Moodle URL
 
 Install your preferred assistant separately. The examples below are for **Codex CLI**, **Claude Code** and **OpenCode running on this computer**. Hosted chats cannot reach your computer's `127.0.0.1`.
 
+The app binds to IPv4 `127.0.0.1:8787` on every launch. The generated `moodle.json`, environment scripts and MCP configuration files use this same address. Start the app before connecting the assistant. A browser-based assistant running in the cloud or a CLI inside a separate VM/container does not share this loopback address; run the assistant on the host computer for this version. The token authenticates both REST and the optional MoodlIA MCP endpoint.
+
 Open a terminal **in the workspace folder** using the path shown by the application's Workspace folder menu. Load the token into that shell without displaying it:
 
 PowerShell:

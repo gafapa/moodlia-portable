@@ -35,6 +35,10 @@ jobs:
       - run: python -m pip install -r requirements-build.txt
       - run: npm ci
       - run: npm test
+      - name: Allow PostgreSQL's restricted process to read the Windows runner workspace
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: icacls "$env:GITHUB_WORKSPACE" /grant "${env:USERNAME}:(OI)(CI)F" /Q
       - run: python scripts/build.py
       - name: Verify each version with and without the plugin
         run: python scripts/qualify.py

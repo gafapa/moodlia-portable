@@ -7,7 +7,7 @@ import urllib.request
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 from local_proxy import create_proxy
-from portable import free_port
+from portable import free_port, check_port
 
 
 class ProxyTests(unittest.TestCase):
@@ -54,3 +54,5 @@ class ProxyTests(unittest.TestCase):
             for worker in workers:
                 worker.shutdown()
                 worker.server_close()
+        # A real MCP/REST round trip must not prevent the next immediate app launch.
+        check_port(proxy_port)
