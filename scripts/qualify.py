@@ -14,6 +14,30 @@ bundle = ROOT / 'build' / 'portable'
 versions = options.versions or json.loads((bundle / 'versions.json').read_text())
 executable = bundle / ('moodlia-backend.exe' if os.name == 'nt' else 'moodlia-backend')
 results = []
+
+
+def report_failure(workspace, attempt):
+    """Expose bounded CI diagnostics without publishing local credentials."""
+    secrets = []
+    configuration = workspace / 'data' / 'config.json'
+    if configuration.is_file():
+        settings = json.loads(configuration.read_text())
+        secrets.extend(str(settings[key]) for key in ['password', 'database_password'] if settings.get(key))
+    token = workspace / 'connection' / 'token.txt'
+    if token.is_file():
+        secrets.append(token.read_text().strip())
+    logs = [workspace / (attempt + '.log'), *sorted((workspace / 'data' / 'logs').glob('*.log'))]
+    for log in logs:
+        if not log.is_file():
+            continue
+        content = log.read_text(encoding='utf-8', errors='replace')
+        for secret in secrets:
+            if secret:
+                content = content.replace(secret, '[REDACTED]')
+        print('Diagnostic: ' + log.name, flush=True)
+        print('\n'.join(content.splitlines()[-100:]), flush=True)
+
+
 for version in versions:
     for plugin in [True, False]:
         workspace = ROOT / 'test-workspaces' / (version + ('-plugin' if plugin else '-core'))
@@ -23,8 +47,12 @@ for version in versions:
             arguments.append('--without-plugin')
         started = time.time()
         for attempt in ['initial', 'restart']:
-            with (workspace / (attempt + '.log')).open('w', encoding='utf-8') as output:
-                subprocess.run(arguments, stdout=output, stderr=subprocess.STDOUT, timeout=1200, check=True)
+            try:
+                with (workspace / (attempt + '.log')).open('w', encoding='utf-8') as output:
+                    subprocess.run(arguments, stdout=output, stderr=subprocess.STDOUT, timeout=1200, check=True)
+            except (subprocess.SubprocessError, OSError):
+                report_failure(workspace, attempt)
+                raise
             token = (workspace / 'connection' / 'token.txt').read_bytes()
             if attempt == 'initial':
                 original_token = token
