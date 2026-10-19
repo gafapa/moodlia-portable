@@ -1,0 +1,96 @@
+{
+  "schema": 1,
+  "sources": {
+    "moodle-4.5.15": {
+      "url": "https://download.moodle.org/download.php/direct/stable405/moodle-4.5.15.zip",
+      "release_commit": "215f44380bdc3ccf852a3a22e34f8423ff64033a",
+      "sha256": "b039082a57034f1984ac3690fe8ded8856cafc6c6f87b4d0181f52d4929786a6"
+    },
+    "moodle-5.0.8": {
+      "url": "https://download.moodle.org/download.php/direct/stable500/moodle-5.0.8.zip",
+      "release_commit": "3087780dc4668773709ee064839a0ea2773cdf30",
+      "sha256": "50ed8b8953dc987550125e5069cad91ce0a6e71664ee492a0cc7bfd2080e92bd"
+    },
+    "moodle-5.1.8": {
+      "url": "https://download.moodle.org/download.php/direct/stable501/moodle-5.1.8.zip",
+      "release_commit": "cc0bf17da8b5fbd290faf95b2b14a03d64331923",
+      "sha256": "de4219bb4694405bbb442bcaf66ab5ef631d864837a1a4e2736de8ab146c7d58"
+    },
+    "moodle-5.2.4": {
+      "url": "https://download.moodle.org/download.php/direct/stable502/moodle-5.2.4.zip",
+      "release_commit": "2df605b1e093248e8f8d1e2fc081fb3b1f65665f",
+      "sha256": "079e79d8efeee943781620684e039e6ed1b93ab914878cd8a1a2cb0371bbc5bc"
+    },
+    "moodle-5.3.0": {
+      "url": "https://download.moodle.org/download.php/direct/stable503/moodle-5.3.zip",
+      "release_commit": "42622298fe06f9626d988d60b2bf589bd8f850e8",
+      "sha256": "fdb6c705ddf2d9bcc613d2ca8aa2c30dcfda6880ca09df5a054b8ea77c06833a"
+    },
+    "plugin": {
+      "url": "https://codeload.github.com/gafapa/moodle-local_moodlia/zip/44c38c41d1fef9dd8c335829cc5f09a8a5b8c92c",
+      "commit": "44c38c41d1fef9dd8c335829cc5f09a8a5b8c92c",
+      "sha256": "23b8ef6071c471fddba4f9f8681d88591ad1f06e29bd24ca8302b212c6e8e5c7"
+    },
+    "postgres-win32-x64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-windows-amd64/16.15.0/embedded-postgres-binaries-windows-amd64-16.15.0.jar",
+      "sha256": "51c7812dc1af47c9a2ccb64fe74efb88c515cff2da347ce72aab92b4cc8e1191"
+    },
+    "postgres17-win32-x64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-windows-amd64/17.11.0/embedded-postgres-binaries-windows-amd64-17.11.0.jar",
+      "sha256": "98040fae18dd9633ff95932125b0cecf0a45a1a9312e216e2a33ad03a31d4251"
+    },
+    "php-win32-x64": {
+      "url": "https://downloads.php.net/~windows/releases/php-8.3.35-nts-Win32-vs16-x64.zip",
+      "expected_sha256": "25a8e2ac9ff30f1d768d1447c09a600617fa6e6082729f6e95f008b59c91fe45",
+      "sha256": "25a8e2ac9ff30f1d768d1447c09a600617fa6e6082729f6e95f008b59c91fe45"
+    },
+    "postgres-darwin-x64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-darwin-amd64/16.15.0/embedded-postgres-binaries-darwin-amd64-16.15.0.jar",
+      "sha256": "1229188b99515d2160d5cb6222bc96d9c5f3a248268df3bc2dfe0047e6c233d8"
+    },
+    "postgres17-darwin-x64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-darwin-amd64/17.11.0/embedded-postgres-binaries-darwin-amd64-17.11.0.jar",
+      "sha256": "d464ff178e9860ba204662ac23fa547504b7fd392392ff2fb92e3fd73b5bdb64"
+    },
+    "php-darwin-x64": {
+      "url": "https://dl.static-php.dev/static-php-cli/bulk/php-8.3.32-cli-macos-x86_64.tar.gz",
+      "sha256": "6e059d66d149f2faa1d216e494a660752ef7e5769f2d4fded9a0e089574949a2"
+    },
+    "postgres-darwin-arm64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-darwin-arm64v8/16.15.0/embedded-postgres-binaries-darwin-arm64v8-16.15.0.jar",
+      "sha256": "65b953905f0a4d46030767a6b44a52360170d69a7985f1b02aa435f2f6256a83"
+    },
+    "postgres17-darwin-arm64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-darwin-arm64v8/17.11.0/embedded-postgres-binaries-darwin-arm64v8-17.11.0.jar",
+      "sha256": "a1c2786acb0c398f9b2d76806fc52f5dc8b222cbc8e9383a9b9702084daaf3a5"
+    },
+    "php-darwin-arm64": {
+      "url": "https://dl.static-php.dev/static-php-cli/bulk/php-8.3.32-cli-macos-aarch64.tar.gz",
+      "sha256": "ac297da5c45c525c660b8d0c73f5aa478ad9005d7c85096dc841220aa9c192e4"
+    },
+    "postgres-linux-x64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-linux-amd64/16.15.0/embedded-postgres-binaries-linux-amd64-16.15.0.jar",
+      "sha256": "653abc065c682b85d3da50168fb95dc524bd85426cdec9ce3695a550ef431df2"
+    },
+    "postgres17-linux-x64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-linux-amd64/17.11.0/embedded-postgres-binaries-linux-amd64-17.11.0.jar",
+      "sha256": "0dd7b72b6f335b8ecfb355fa24c5781e8a93edd09880bb77eb52ebbf29b3e96d"
+    },
+    "php-linux-x64": {
+      "url": "https://dl.static-php.dev/static-php-cli/bulk/php-8.3.32-cli-linux-x86_64.tar.gz",
+      "sha256": "7928396c17aabcd5bb074fe82e07b4cb693c6d04360a4415799a143a9f9686c6"
+    },
+    "postgres-linux-arm64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-linux-arm64v8/16.15.0/embedded-postgres-binaries-linux-arm64v8-16.15.0.jar",
+      "sha256": "f846a9989d686b7977d6eca9bc9d8b2b69e3f70c7eb60e032197d9c574a6136c"
+    },
+    "postgres17-linux-arm64": {
+      "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-linux-arm64v8/17.11.0/embedded-postgres-binaries-linux-arm64v8-17.11.0.jar",
+      "sha256": "8b042e0ea418b1927d95399207950da0734d27fe01e29503ade3bdc464ad4c2b"
+    },
+    "php-linux-arm64": {
+      "url": "https://dl.static-php.dev/static-php-cli/bulk/php-8.3.32-cli-linux-aarch64.tar.gz",
+      "sha256": "4c29858ecfa30d93e854d17494f422b593afa6da8ec80ae979191e69604dc955"
+    }
+  }
+}

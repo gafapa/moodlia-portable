@@ -1,0 +1,13 @@
+__pycache__/
+.venv/
+build/
+dist/
+.cache/
+data/
+connection/
+exports/
+*.spec
+node_modules/
+test-workspaces/
+.postgres-inspect.zip
+audit.tmp.json
