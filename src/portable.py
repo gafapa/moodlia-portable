@@ -114,12 +114,16 @@ class PortableMoodle:
     def prepare(self, requested_version=None, plugin_enabled=True):
         if not self.php.is_file() or not (self.pg / ('initdb' + self.suffix)).is_file():
             raise RuntimeError('Bundled PHP/PostgreSQL missing. Use a built native package, or run scripts/build.py.')
-        for directory in [self.data, self.connection, self.workspace / 'exports', self.data / 'logs', self.data / 'moodledata']:
+        private_directories = [self.data, self.connection, self.workspace / 'exports', self.data / 'logs', self.data / 'moodledata']
+        for directory in private_directories:
             directory.mkdir(parents=True, exist_ok=True, mode=0o700)
         if os.name == 'nt':
             # Restrict credentials and database files to the current Windows user.
             identity = subprocess.check_output(['whoami'], text=True).strip()
-            for directory in [self.data, self.connection]:
+            # Python's mode=0700 can create protected child ACLs owned by Administrators
+            # in elevated sessions. Grant the user directly on every managed directory
+            # so PostgreSQL's restricted child can create its log file there.
+            for directory in private_directories:
                 subprocess.run(['icacls', str(directory), '/inheritance:r', '/grant:r',
                                 identity + ':(OI)(CI)F'], check=True, capture_output=True)
         config_path = self.data / 'config.json'
