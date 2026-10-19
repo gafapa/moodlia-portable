@@ -1,5 +1,7 @@
 # MoodlIA Portable
 
+[![Native packages](https://github.com/gafapa/moodlia-portable/actions/workflows/native.yml/badge.svg)](https://github.com/gafapa/moodlia-portable/actions/workflows/native.yml)
+
 A native desktop application for authoring Moodle courses without access to a school server. Install the app, choose a Moodle version starting at 4.5, and work in Moodle's home page inside the app window. PHP, PostgreSQL and the launcher are bundled. Teachers do not install Docker, PHP, a database, Python or Node.js.
 
 The only human account is **teacher**, a Moodle site administrator. Its unique password and API token are generated on the first launch. Moodle's built-in guest record also exists; guest login and self-registration are disabled.
@@ -66,5 +68,7 @@ Tokens are stored in `connection/token.txt` as requested, with owner-only permis
 Native database directories are not a cross-OS exchange format. Move courses between computers and servers using `.mbz` backups. Restore compatibility depends on Moodle versions, destination permissions and installed activity plugins; use the same or a newer supported destination and standard activities. The destination does **not** need MoodlIA for native Moodle activities.
 
 ## Third-party components
+
+Copyright (C) 2026 Pablo Gallego. MoodlIA Portable is licensed under GPL-3.0-or-later; see [LICENSE](LICENSE) for the full license text.
 
 Moodle and the MoodlIA plugin are GPL software; their source archives and notices ship in the application payload. PHP is distributed under its included PHP license. PostgreSQL binaries are redistributed by [Zonky](https://github.com/zonkyio/embedded-postgres-binaries); PHP Unix binaries by [static-php-cli](https://github.com/crazywhalecc/static-php-cli), and Windows PHP by [PHP](https://windows.php.net/). Windows packages include Microsoft Visual C++ runtime DLLs copied app-locally by the maintainer; distribute them only under Microsoft's applicable redistribution terms. See [third-party notices](docs/THIRD-PARTY.md).
