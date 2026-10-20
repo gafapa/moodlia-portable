@@ -12,6 +12,11 @@ on:
         required: false
   push:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - LICENSE
+      - docs/**
+      - .github/workflows/pages.yml
   pull_request:
 permissions:
   contents: read
