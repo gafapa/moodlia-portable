@@ -8,7 +8,15 @@ The only human account is **teacher**, a Moodle site administrator. Its unique p
 
 The **Install MoodlIA plugin** option is checked by default. With the plugin, connect Codex, Claude Code or OpenCode through Moodle's local MCP endpoint. Without it, use the generated Core REST token and a Core-compatible CLI. The application does not include or pay for an AI assistant or model.
 
-## Application packages
+[Status](#status) · [Getting started](#getting-started) · [Usage](#usage) · [Development](#development) · [Security and privacy](#security-and-privacy) · [Documentation](#documentation) · [License](#license)
+
+## Status
+
+Implemented desktop application and native packaging workflow. Platform instructions are not proof of signing, notarization or native qualification; consult the validation record before distribution.
+
+## Getting started
+
+### Application packages
 
 - Windows x64: a per-user NSIS setup `.exe`, registered in Installed Apps, with Start menu and desktop shortcuts. The installer starts MoodlIA after installation. An optional ZIP can be built with `npm run package -- --win zip`.
 - macOS Intel / Apple Silicon: `.dmg` with the `.app` to copy to Applications, and ZIP.
@@ -16,7 +24,7 @@ The **Install MoodlIA plugin** option is checked by default. With the plugin, co
 
 This repository contains the implementation and native packaging workflow. Read [validation status](docs/VALIDATION.md) before treating a target as qualified. Unsigned local builds are not signed/notarized public releases.
 
-## First launch
+### First launch
 
 1. Install and open **MoodlIA**.
 2. Select a bundled stable Moodle release. Keep **Install MoodlIA plugin** checked for MCP authoring.
@@ -31,7 +39,13 @@ Before a changed runtime can bootstrap an existing site, the launcher stops Post
 
 Each workspace has one fixed Moodle version and plugin choice. To choose again, use a **new empty workspace**; never downgrade an existing Moodle database. Automatic in-place Moodle upgrades are outside this first version.
 
-## Build from source
+## Usage
+
+Follow the first-launch steps above to create an isolated workspace, connect your chosen assistant if needed, and export courses as Moodle `.mbz` backups. See the [quick start](docs/QUICKSTART.md) for the full authoring workflow.
+
+## Development
+
+### Build from source
 
 Maintainers need Python 3.12+, Node.js 22+ and the native packaging tools for their OS. These are build requirements, not teacher requirements.
 
@@ -55,7 +69,9 @@ On Windows use `build\portable\moodlia-backend.exe`. `--check` initializes a rea
 
 Do not overwrite a running app's runtime or delete `build/portable` without preserving any development workspace inside it. Builds refuse to overwrite an existing backend directory.
 
-## Boundaries
+## Security and privacy
+
+### Boundaries
 
 The HTTP server binds only to `127.0.0.1:8787`; PostgreSQL uses a password and a separate loopback port. HTTP is intentional for this local-only desktop server. Do not expose it to the LAN or internet. Any local process with the token has administrator access. The app uses Electron renderer sandboxing, disables Node integration, denies permission requests and opens external web links in the system browser.
 
@@ -67,7 +83,24 @@ Tokens are stored in `connection/token.txt` as requested, with owner-only permis
 
 Native database directories are not a cross-OS exchange format. Move courses between computers and servers using `.mbz` backups. Restore compatibility depends on Moodle versions, destination permissions and installed activity plugins; use the same or a newer supported destination and standard activities. The destination does **not** need MoodlIA for native Moodle activities.
 
-## Third-party components
+## Documentation
+
+- [Project Pages](https://gafapa.github.io/moodlia-portable/)
+
+Build the repository documentation portal with `python tools/build-project-page.py`. Its status comes from this README; purpose and first steps are maintained in `docs/project-page.json`. The `pages.yml` workflow publishes the portal without deploying the application or changing `moodlia.com`.
+
+Runs an isolated local Moodle for authoring. The optional [MoodlIA plugin](https://github.com/gafapa/moodle-local_moodlia) connects external automation clients; the app does not supply an AI subscription.
+
+- [Source code](https://github.com/gafapa/moodlia-portable)
+- [Issue tracker](https://github.com/gafapa/moodlia-portable/issues)
+- [MoodlIA website](https://moodlia.com)
+- [docs/QUICKSTART.md](docs/QUICKSTART.md)
+- [docs/VALIDATION.md](docs/VALIDATION.md)
+- [docs/THIRD-PARTY.md](docs/THIRD-PARTY.md)
+
+## License
+
+### Third-party components
 
 Copyright (C) 2026 Pablo Gallego. MoodlIA Portable is licensed under GPL-3.0-or-later; see [LICENSE](LICENSE) for the full license text.
 

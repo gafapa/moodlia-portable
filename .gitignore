@@ -11,3 +11,4 @@ node_modules/
 test-workspaces/
 .postgres-inspect.zip
 audit.tmp.json
+/.project-pages/

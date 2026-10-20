@@ -31,6 +31,24 @@ The native workflow is provided under `.github/workflows/native.yml`; a workflow
 - Automated login waits for Moodle's asynchronous password-control rendering before entering credentials; an early test filled the element that Moodle then replaced. The corrected test verified the submitted credential match as booleans without recording secrets.
 - The installer is unsigned. Local execution does not establish clean-machine compatibility or public distribution qualification.
 
-The integration fixtures are local and fictional. They do not qualify a school's production Moodle or all possible activities/files. Local Windows coverage currently exercises Moodle 4.5.15 with MoodlIA and 5.3.0 without it; the other version/plugin combinations remain unqualified until the native matrix runs.
+The integration fixtures are local and fictional. They do not qualify a school's production Moodle or all possible activities/files. Local Windows coverage exercises Moodle 4.5.15 with MoodlIA and 5.3.0 without it. Hosted checks expand that version coverage as recorded below.
 
-macOS and Linux packages have build definitions and pinned runtimes, but have not been built or executed in this Windows session. No hosted workflow, public release, Windows signature or macOS notarization has been verified. Third-party notice review and clean-machine qualification remain public-release gates.
+## Hosted GitHub Actions
+
+The source repository is public at [gafapa/moodlia-portable](https://github.com/gafapa/moodlia-portable). Native qualification installs a real Moodle, authenticates the `teacher` administrator through REST, executes the MCP identity tool when enabled, and restarts the same workspace while comparing token and password. The complete version set is 4.5.15, 5.0.8, 5.1.8, 5.2.4 and 5.3.0, each with and without MoodlIA.
+
+Observed on 2026-10-20:
+
+| Target | Native version/plugin combinations | Packaging | Evidence |
+| --- | --- | --- | --- |
+| Linux x64 | All 10 passed | deb, rpm, AppImage and tarball passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591662) |
+| Linux ARM64 | All 10 passed | deb, rpm, AppImage and tarball passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591792) |
+| macOS ARM64 | All 10 passed | dmg and ZIP passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591971) |
+| Windows x64 | All 10 passed | NSIS executable passed; hosted installer lifecycle retest pending | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39343387793/job/118370088018) |
+| macOS Intel | Qualification running | Pending | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591709) |
+
+The Windows job above subsequently failed in the test harness because an empty Windows user profile has no per-user Uninstall registry key. The harness now treats that state as an empty list and is being retested. The native startup and packaging steps in that job passed.
+
+Native restart checks caught and corrected Unix port reuse after connections enter TIME_WAIT. Windows CI also caught protected child ACLs created by Python in elevated sessions: the launcher now grants the current user access explicitly on each managed private directory, allowing PostgreSQL's restricted process to create its log. A separate [Windows Server 2022 runtime run](https://github.com/gafapa/moodlia-portable/actions/runs/39343388433) passed first launch and restart of Moodle 4.5.15 in both plugin modes.
+
+Package artifacts contain application payloads and sanitized qualification summaries. Workspaces, database clusters, credentials and tokens are excluded. macOS/Linux native backend checks and package builds do not establish interactive desktop qualification or clean-machine compatibility. Windows signatures, macOS notarization, third-party notice review and clean-machine qualification remain public-release gates. No GitHub Release has been published.
