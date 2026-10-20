@@ -44,10 +44,14 @@ Observed on 2026-10-20:
 | Linux x64 | All 10 passed | deb, rpm, AppImage and tarball passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591662) |
 | Linux ARM64 | All 10 passed | deb, rpm, AppImage and tarball passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591792) |
 | macOS ARM64 | All 10 passed | dmg and ZIP passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591971) |
-| Windows x64 | All 10 passed | NSIS executable passed; hosted installer lifecycle retest pending | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39343387793/job/118370088018) |
-| macOS Intel | Qualification running | Pending | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591709) |
+| Windows x64 | All 10 passed | NSIS executable and installer lifecycle passed | [All versions](https://github.com/gafapa/moodlia-portable/actions/runs/39343387793/job/118370088018), [Installer lifecycle](https://github.com/gafapa/moodlia-portable/actions/runs/39346307504/job/118379633146) |
+| macOS Intel | All 10 passed | dmg and ZIP passed | [Native job](https://github.com/gafapa/moodlia-portable/actions/runs/39342630985/job/118367591709) |
 
-The Windows job above subsequently failed in the test harness because an empty Windows user profile has no per-user Uninstall registry key. The harness now treats that state as an empty list and is being retested. The native startup and packaging steps in that job passed.
+All 50 native version/plugin/target combinations passed. The Windows all-version job subsequently failed in the test harness because an empty Windows user profile has no per-user Uninstall registry key. The corrected harness treats that state as an empty list. The separate installer lifecycle run passed using Moodle 4.5.15, with all five versions still bundled in its package.
+
+The hosted Windows lifecycle test creates a course and page before installation, records their identities, and compares them after installation, reinstallation/update and uninstall. It also verifies an active-backend update refusal, Installed Apps registration, login inside the installed Electron application, renderer sandboxing, graceful database shutdown, unchanged configuration/credential hashes, a marker in the default user-data workspace and another native course export after uninstall. The course/page identity and accented content survived. These are synthetic fixtures, not production teacher data.
+
+The native workflow defaults to all targets and bundled versions. Maintainers can use `workflow_dispatch` inputs `matrix` (an include-array JSON value) and `versions` (comma-separated versions) for targeted reruns. Targeted qualification summaries list only the versions actually executed; they do not replace the all-version evidence above.
 
 Native restart checks caught and corrected Unix port reuse after connections enter TIME_WAIT. Windows CI also caught protected child ACLs created by Python in elevated sessions: the launcher now grants the current user access explicitly on each managed private directory, allowing PostgreSQL's restricted process to create its log. A separate [Windows Server 2022 runtime run](https://github.com/gafapa/moodlia-portable/actions/runs/39343388433) passed first launch and restart of Moodle 4.5.15 in both plugin modes.
 
