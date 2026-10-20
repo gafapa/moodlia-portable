@@ -52,6 +52,9 @@ if existing and (not resume or not all(Path(entry).resolve() == target for entry
 if resume and (not existing or not (target / 'MoodlIA.exe').is_file()):
     raise RuntimeError('Resume is allowed only for this exact isolated test installation.')
 previous_executable = hashlib.sha256((target / 'MoodlIA.exe').read_bytes()).hexdigest() if resume else None
+subprocess.run([sys.executable, str(ROOT / 'scripts' / 'smoke_course.py'), str(workspace)],
+               cwd=ROOT, timeout=300, check=True)
+original_course = json.loads((ROOT / 'build' / 'course-evidence.json').read_text())
 protected = [workspace / 'connection' / 'token.txt', workspace / 'connection' / 'credentials.txt',
              workspace / 'data' / 'config.json']
 original = {str(path): hashlib.sha256(path.read_bytes()).hexdigest() for path in protected}
@@ -102,6 +105,8 @@ if installed_entries():
     raise RuntimeError('Uninstall registration still exists')
 subprocess.run([sys.executable, str(ROOT / 'scripts' / 'smoke_course.py'), str(workspace)],
                cwd=ROOT, timeout=300, check=True)
+if json.loads((ROOT / 'build' / 'course-evidence.json').read_text()) != original_course:
+    raise RuntimeError('The course or page identity changed during install/update/uninstall')
 sentinel.unlink()
 evidence = {'guard_when_running': 'passed', 'system_registration': 'passed', 'installed_app_login': 'passed',
             'update': 'passed', 'uninstall': 'passed', 'workspace_credentials_and_configuration': 'preserved',
