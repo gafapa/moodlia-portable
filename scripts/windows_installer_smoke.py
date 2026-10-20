@@ -21,7 +21,12 @@ if os.name != 'nt' or (target.exists() and not resume):
 
 def installed_entries():
     entries = []
-    with winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'Software\Microsoft\Windows\CurrentVersion\Uninstall') as parent:
+    try:
+        uninstall_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r'Software\Microsoft\Windows\CurrentVersion\Uninstall')
+    except FileNotFoundError:
+        # A fresh Windows user may not have installed any per-user applications yet.
+        return entries
+    with uninstall_key as parent:
         for index in range(winreg.QueryInfoKey(parent)[0]):
             with winreg.OpenKey(parent, winreg.EnumKey(parent, index)) as key:
                 try:

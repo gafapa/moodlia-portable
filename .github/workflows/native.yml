@@ -1,6 +1,11 @@
 name: Native packages
 on:
   workflow_dispatch:
+    inputs:
+      matrix:
+        description: 'Optional matrix include JSON, e.g. [{"os":"windows-latest","architecture":"x64"}]'
+        type: string
+        required: false
   push:
     branches: [main]
   pull_request:
@@ -11,17 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: windows-latest
-            architecture: x64
-          - os: macos-15-intel
-            architecture: x64
-          - os: macos-latest
-            architecture: arm64
-          - os: ubuntu-22.04
-            architecture: x64
-          - os: ubuntu-24.04-arm
-            architecture: arm64
+        include: ${{ fromJSON(inputs.matrix || '[{"os":"windows-latest","architecture":"x64"},{"os":"macos-15-intel","architecture":"x64"},{"os":"macos-latest","architecture":"arm64"},{"os":"ubuntu-22.04","architecture":"x64"},{"os":"ubuntu-24.04-arm","architecture":"arm64"}]') }}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
