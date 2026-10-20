@@ -11,7 +11,8 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--moodle-version', action='append', dest='versions')
 options = parser.parse_args()
 bundle = ROOT / 'build' / 'portable'
-versions = options.versions or json.loads((bundle / 'versions.json').read_text())
+requested_versions = [value.strip() for value in os.environ.get('MOODLIA_QUALIFY_VERSIONS', '').split(',') if value.strip()]
+versions = options.versions or requested_versions or json.loads((bundle / 'versions.json').read_text())
 executable = bundle / ('moodlia-backend.exe' if os.name == 'nt' else 'moodlia-backend')
 results = []
 
