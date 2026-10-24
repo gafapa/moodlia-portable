@@ -78,6 +78,12 @@ def build(versions):
         (app / 'versions').mkdir(exist_ok=True)
         shutil.copy2(download('moodle-' + version, sources), app / 'versions' / (version + '.zip'))
     extract_zip(download('plugin', sources), app / 'plugin', strip_root=True)
+    plugins = json.loads((ROOT / 'plugins.json').read_text(encoding='utf-8'))
+    for component, plugin in plugins.items():
+        for branch in plugin['versions']:
+            if any(version.startswith(branch + '.') for version in versions):
+                extract_zip(download(plugin['source_prefix'] + branch, sources),
+                            app / 'plugins' / component / branch, strip_root=True)
     php_root = output / 'runtime' / 'php'
     php_root.mkdir(parents=True)
     php_archive = download('php-' + target, sources)
@@ -117,6 +123,7 @@ def finalize(output, versions, target):
         if source.suffix in ('.php', '.ini', '.cnf', '.txt') and source.name != 'php.ini':
             shutil.copyfile(source, app / source.name)
     (output / 'versions.json').write_text(json.dumps(versions) + '\n', encoding='utf-8')
+    shutil.copy2(ROOT / 'plugins.json', output / 'plugins.json')
     (output / 'runtime-manifest.json').write_text(json.dumps({
         'app_version': json.loads((ROOT / 'package.json').read_text())['version'],
         'target': target, 'postgres_majors': [16, 17], 'versions': versions,

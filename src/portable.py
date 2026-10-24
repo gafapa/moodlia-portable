@@ -111,7 +111,32 @@ class PortableMoodle:
             arguments += ['-d', 'extension_dir=' + str(self.php.parent / 'ext')]
         return arguments
 
-    def prepare(self, requested_version=None, plugin_enabled=True):
+    def selected_plugins(self, version, selected):
+        catalog_file = self.root / 'plugins.json'
+        catalog = json.loads(catalog_file.read_text(encoding='utf-8')) if catalog_file.exists() else {}
+        branch = '.'.join(version.split('.')[:2])
+        if not isinstance(selected, list) or any(not isinstance(item, str) for item in selected):
+            raise RuntimeError('Optional plugins must be a list of component names.')
+        if len(set(selected)) != len(selected):
+            raise RuntimeError('An optional plugin was selected more than once.')
+        for component in selected:
+            if component not in catalog or branch not in catalog[component]['versions']:
+                raise RuntimeError('The selected plugin is unavailable for Moodle ' + version + ': ' + component)
+        return {component: catalog[component] for component in selected}
+
+    def copy_plugins(self, staged, selected, version):
+        public = staged / 'public' if (staged / 'public' / 'index.php').is_file() else staged
+        branch = '.'.join(version.split('.')[:2])
+        for component, plugin in self.selected_plugins(version, selected).items():
+            destination = (public / plugin['path']).resolve()
+            if not destination.is_relative_to(public.resolve()):
+                raise RuntimeError('Optional plugin path escapes the Moodle site.')
+            source = self.root / 'app' / 'plugins' / component / branch
+            if not (source / 'version.php').is_file():
+                raise RuntimeError('Bundled optional plugin is missing: ' + component)
+            shutil.copytree(source, destination)
+
+    def prepare(self, requested_version=None, plugin_enabled=True, optional_plugins=None):
         if not self.php.is_file() or not (self.pg / ('initdb' + self.suffix)).is_file():
             raise RuntimeError('Bundled PHP/PostgreSQL missing. Use a built native package, or run scripts/build.py.')
         private_directories = [self.data, self.connection, self.workspace / 'exports', self.data / 'logs', self.data / 'moodledata']
@@ -133,6 +158,8 @@ class PortableMoodle:
                 raise RuntimeError('Unsupported workspace format. No migration was attempted.')
             if requested_version and requested_version != self.config['moodle_version']:
                 raise RuntimeError('This workspace already uses Moodle ' + self.config['moodle_version'] + '. Use a new workspace to select another version.')
+            if optional_plugins is not None and sorted(optional_plugins) != sorted(self.config.get('optional_plugins', [])):
+                raise RuntimeError('This workspace already has its plugin selection. Manage changes inside Moodle.')
         else:
             versions = json.loads((self.root / 'versions.json').read_text(encoding='utf-8'))
             if requested_version is None:
@@ -140,10 +167,12 @@ class PortableMoodle:
                 requested_version = input('Moodle version [' + versions[0] + ']: ').strip() or versions[0]
             if requested_version not in versions:
                 raise RuntimeError('The selected Moodle version is not included in this package.')
+            self.selected_plugins(requested_version, optional_plugins or [])
             self.config = {'schema': 1, 'http_port': 8787, 'database_port': free_port(),
                            'database_password': secrets.token_urlsafe(32),
                            'username': 'teacher', 'password': 'Aa9!' + secrets.token_urlsafe(24),
-                           'moodle_version': requested_version, 'plugin_enabled': plugin_enabled}
+                           'moodle_version': requested_version, 'plugin_enabled': plugin_enabled,
+                           'optional_plugins': optional_plugins or []}
             self.config['database_major'] = 17 if requested_version.startswith('5.3.') else 16
             private_write(config_path, json.dumps(self.config, indent=2) + '\n')
         self.database_major = self.config.get('database_major', 16)
@@ -159,6 +188,7 @@ class PortableMoodle:
             public = staged / 'public' if (staged / 'public' / 'index.php').is_file() else staged
             if self.config['plugin_enabled']:
                 shutil.copytree(self.root / 'app' / 'plugin', public / 'local' / 'moodlia')
+            self.copy_plugins(staged, self.config.get('optional_plugins', []), self.config['moodle_version'])
             shutil.copyfile(self.root / 'app' / 'config.php', staged / 'config.php')
             (staged / '.portable-ready').touch()
             staged.rename(self.moodle)
@@ -289,6 +319,9 @@ class PortableMoodle:
         raise RuntimeError('Moodle did not become ready. See data/logs/.')
 
     def verify(self):
+        if self.config.get('optional_plugins'):
+            self.run(self.php_args() + [self.root / 'app' / 'verify_plugins.php', self.moodle],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         token = (self.connection / 'token.txt').read_text(encoding='utf-8').strip()
         payload = urllib.parse.urlencode({'wstoken': token, 'moodlewsrestformat': 'json',
                                          'wsfunction': 'local_moodlia_get_current_user' if self.config['plugin_enabled'] else 'core_webservice_get_site_info'}).encode()
@@ -351,6 +384,8 @@ def main():
     parser.add_argument('--workspace', type=Path)
     parser.add_argument('--desktop', action='store_true')
     parser.add_argument('--without-plugin', action='store_true')
+    parser.add_argument('--plugin', action='append', dest='optional_plugins',
+                        help='Optional bundled component, for example format_onetopic. Repeat to select several.')
     arguments = parser.parse_args()
     root = bundle_root()
     application = PortableMoodle(root, arguments.workspace)
@@ -367,7 +402,7 @@ def main():
     try:
         with instance_lock(application.data / 'launcher.lock'):
             try:
-                application.prepare(arguments.moodle_version, not arguments.without_plugin)
+                application.prepare(arguments.moodle_version, not arguments.without_plugin, arguments.optional_plugins)
                 application.start_database()
                 application.install()
                 application.start_web()

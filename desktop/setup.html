@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+  <title>Set up MoodlIA</title>
+  <link rel="stylesheet" href="setup.css">
+  <script src="setup.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <img src="icon.svg" width="48" height="48" alt="">
+      <h1 data-copy="title">Create your local Moodle</h1>
+      <p data-copy="intro">Choose a version and the tools you want to use. Everything is installed on this computer.</p>
+    </header>
+    <form id="setup-form">
+      <section aria-labelledby="version-title">
+        <h2 id="version-title" data-copy="versionTitle">Moodle version</h2>
+        <label for="moodle-version" data-copy="versionLabel">Version to install</label>
+        <select id="moodle-version" aria-describedby="version-help" required disabled></select>
+        <p id="version-help" class="hint" data-copy="versionHelp">Use the same version as your school when possible. This choice belongs to this workspace.</p>
+      </section>
+      <fieldset>
+        <legend data-copy="pluginsTitle">Optional plugins</legend>
+        <label class="plugin-option" for="moodlia-plugin">
+          <input id="moodlia-plugin" type="checkbox" checked>
+          <span><strong>MoodlIA</strong><span class="description" data-copy="moodliaDescription">Connect your AI assistant and automate Moodle tasks.</span></span>
+        </label>
+        <div id="optional-plugins"></div>
+        <p class="hint" data-copy="pluginsHelp">You can install Moodle on its own. Course formats must also be available on the destination Moodle when transferring courses.</p>
+      </fieldset>
+      <p class="account" data-copy="account">Your administrator account will be teacher. Its password is created automatically and saved in your workspace.</p>
+      <p id="setup-status" role="status" aria-live="polite"></p>
+      <footer>
+        <button type="button" id="cancel" class="secondary" data-copy="cancel">Cancel</button>
+        <button type="submit" id="install" disabled data-copy="install">Install Moodle</button>
+      </footer>
+    </form>
+  </main>
+</body>
+</html>

@@ -13,6 +13,7 @@ options = parser.parse_args()
 bundle = ROOT / 'build' / 'portable'
 requested_versions = [value.strip() for value in os.environ.get('MOODLIA_QUALIFY_VERSIONS', '').split(',') if value.strip()]
 versions = options.versions or requested_versions or json.loads((bundle / 'versions.json').read_text())
+plugins = json.loads((bundle / 'plugins.json').read_text())
 executable = bundle / ('moodlia-backend.exe' if os.name == 'nt' else 'moodlia-backend')
 results = []
 
@@ -46,6 +47,9 @@ for version in versions:
         arguments = [str(executable), '--moodle-version', version, '--workspace', str(workspace), '--check']
         if not plugin:
             arguments.append('--without-plugin')
+        optional_plugins = ['format_onetopic'] if plugin and '.'.join(version.split('.')[:2]) in plugins['format_onetopic']['versions'] else []
+        for component in optional_plugins:
+            arguments.extend(['--plugin', component])
         started = time.time()
         for attempt in ['initial', 'restart']:
             try:
@@ -63,7 +67,10 @@ for version in versions:
         current_config = json.loads((workspace / 'data' / 'config.json').read_text())
         if current_config['password'] != original_config['password']:
             raise RuntimeError('Password changed on restart')
+        if current_config.get('optional_plugins', []) != optional_plugins:
+            raise RuntimeError('Optional plugin selection changed on restart')
         results.append({'moodle': version, 'plugin': plugin, 'initial': 'passed', 'restart': 'passed',
+                        'optional_plugins': optional_plugins,
                         'token_preserved': True, 'password_preserved': True, 'seconds': round(time.time() - started, 1)})
         (ROOT / 'build' / 'qualification.json').write_text(json.dumps(results, indent=2) + '\n')
         print(f'Qualified {version}, plugin={plugin}', flush=True)

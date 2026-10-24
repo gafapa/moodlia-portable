@@ -4,6 +4,12 @@
 
 Install and launch MoodlIA. On the first launch, choose your Moodle release and whether to include MoodlIA (enabled by default). Use a version compatible with the Moodle that will receive your course. The selected version and plugin choice remain fixed for that workspace.
 
+The setup screen also offers **Onetopic**, an optional course format with tabs,
+on Moodle 4.5, 5.0 and 5.1. It works with or without MoodlIA. Once installed,
+choose it under **Course settings > Course format**. It is not offered for Moodle
+5.2 or 5.3, and transferring a course using it requires the destination site to
+have that format. See [optional plugin details](OPTIONAL-PLUGINS.md).
+
 Open **MoodlIA → Connection files**. `credentials.txt` contains the Moodle URL, username `teacher` and generated password. Log in in the application. `token.txt` contains the API token; it has administrator access to this local site. Keep it private. Do not paste it into a chat.
 
 ## Connect an assistant with MoodlIA installed

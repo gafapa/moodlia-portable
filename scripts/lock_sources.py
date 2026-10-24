@@ -30,8 +30,15 @@ def specifications():
         # Official release distributions include the production Composer dependencies.
         result['moodle-' + version] = {'url': f'https://download.moodle.org/download.php/direct/stable{branch}/moodle-{filename}.zip',
                                       'release_commit': commit}
-    commit = 'bac8761a8d157b830555576e6be23563b7b93db4'
+    commit = 'c928228fb7ae5e59e1764843ecdd7d98e4613519'
     result['plugin'] = {'url': f'https://codeload.github.com/gafapa/moodle-local_moodlia/zip/{commit}', 'commit': commit}
+    for branch, commit in {
+        '4.5': 'bb21cd6eb687365a00f8738181c15ac4f7d0a99a',
+        '5.0': 'ace97b5d8c02b0fd7d28b6b40bc975a4ec918e81',
+        '5.1': 'c7f8f4d80eb573e61dec9eb780dea0fd55eb553c',
+    }.items():
+        result['onetopic-' + branch] = {
+            'url': f'https://codeload.github.com/davidherney/moodle-format_onetopic/zip/{commit}', 'commit': commit}
     for target, (classifier, php_target) in TARGETS.items():
         version = '16.15.0'
         artifact = 'embedded-postgres-binaries-' + classifier

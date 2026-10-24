@@ -8,6 +8,19 @@ The only human account is **teacher**, a Moodle site administrator. Its unique p
 
 The **Install MoodlIA plugin** option is checked by default. With the plugin, connect Codex, Claude Code or OpenCode through Moodle's local MCP endpoint. Without it, use the generated Core REST token and a Core-compatible CLI. The application does not include or pay for an AI assistant or model.
 
+The first-launch setup screen lets you select a bundled Moodle version and
+optional plugins before creating the workspace. MoodlIA is checked by default;
+Onetopic, a course format that displays topics as tabs, is optional and independent
+of MoodlIA. The pinned Onetopic builds support Moodle 4.5, 5.0 and 5.1. The option
+is disabled on 5.2 and 5.3 because no compatible upstream release is declared.
+After installation, select Onetopic under the course's format settings. Course
+transfers require that format on the destination Moodle too. Existing workspaces
+retain their version and plugin choices; manage later plugins inside Moodle.
+
+Setup is available in English and Spanish. Runtime and optional plugin archives
+are bundled, pinned and checksum-verified during packaging; first launch does
+not fetch executable plugins from the internet.
+
 [Status](#status) · [Getting started](#getting-started) · [Usage](#usage) · [Development](#development) · [Security and privacy](#security-and-privacy) · [Documentation](#documentation) · [License](#license)
 
 ## Status

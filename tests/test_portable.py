@@ -21,6 +21,42 @@ from build import download, extract_zip, extract_tar
 
 
 class PortableTests(unittest.TestCase):
+    def test_optional_plugins_respect_version_and_stay_independent_of_moodlia(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'plugins.json').write_text((ROOT / 'plugins.json').read_text())
+            application = PortableMoodle(root)
+            self.assertIn('format_onetopic', application.selected_plugins('4.5.15', ['format_onetopic']))
+            self.assertEqual(application.selected_plugins('5.3.0', []), {})
+            for selected in [['format_unknown'], ['format_onetopic', 'format_onetopic'], 'format_onetopic']:
+                with self.assertRaises(RuntimeError):
+                    application.selected_plugins('4.5.15', selected)
+            with self.assertRaisesRegex(RuntimeError, 'unavailable'):
+                application.selected_plugins('5.2.4', ['format_onetopic'])
+            source = root / 'app' / 'plugins' / 'format_onetopic' / '4.5'
+            source.mkdir(parents=True)
+            (source / 'version.php').write_text("<?php $plugin->component = 'format_onetopic';")
+            staged = root / 'staged'
+            (staged / 'public').mkdir(parents=True)
+            (staged / 'public' / 'index.php').touch()
+            application.copy_plugins(staged, ['format_onetopic'], '4.5.15')
+            self.assertTrue((staged / 'public' / 'course' / 'format' / 'onetopic' / 'version.php').is_file())
+            self.assertFalse((staged / 'public' / 'local' / 'moodlia').exists())
+
+    def test_optional_plugin_selection_cannot_change_an_existing_workspace(self):
+        with tempfile.TemporaryDirectory() as folder:
+            application = PortableMoodle(folder)
+            application.php.parent.mkdir(parents=True)
+            application.php.touch()
+            application.pg.mkdir(parents=True)
+            (application.pg / ('initdb' + application.suffix)).touch()
+            original = {'schema': 1, 'moodle_version': '4.5.15', 'plugin_enabled': False,
+                        'optional_plugins': [], 'password': 'fictional'}
+            private_write(application.data / 'config.json', json.dumps(original))
+            with self.assertRaisesRegex(RuntimeError, 'plugin selection'):
+                application.prepare('4.5.15', False, ['format_onetopic'])
+            self.assertEqual(json.loads((application.data / 'config.json').read_text()), original)
+
     def test_refreshed_download_preserves_old_cache_and_checks_new_bytes(self):
         import build
 

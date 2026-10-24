@@ -1,0 +1,42 @@
+:root {
+  color-scheme: light;
+  font: 16px/1.5 system-ui, sans-serif;
+  color: #183047;
+  background: #f4f6f9;
+  accent-color: #2453a6;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 32px 24px; }
+main { max-width: 760px; margin: 0 auto; padding: 32px 40px; background: #fff; border-radius: 12px; }
+header img { float: right; margin-left: 24px; }
+h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.2; letter-spacing: -.025em; }
+header p { margin: 0; max-width: 60ch; color: #40546b; }
+section { margin-top: 28px; }
+h2, legend { font-weight: 650; font-size: 18px; margin: 0 0 12px; }
+label[for="moodle-version"] { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+select { font: inherit; padding: 10px 36px 10px 12px; min-width: 240px; max-width: 100%; border: 1px solid #8593a5; border-radius: 6px; color: inherit; background: #fff; }
+.hint { font-size: 14px; color: #4b5d72; margin: 8px 0 0; max-width: 68ch; }
+fieldset { padding: 0; margin: 28px 0 0; border: 0; min-width: 0; }
+legend { padding: 0; }
+.plugin-option { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; cursor: pointer; }
+.plugin-option + .plugin-option { border-top: 1px solid #e0e5ec; }
+.plugin-option input { flex: 0 0 18px; width: 18px; height: 18px; margin: 4px 0 0; }
+.description { display: block; font-size: 14px; color: #40546b; margin-top: 2px; }
+.compatibility { display: block; font-size: 13px; color: #704817; margin-top: 4px; }
+.unavailable { cursor: default; }
+.account { border-top: 1px solid #dbe2eb; margin: 24px 0 0; padding-top: 16px; font-size: 14px; color: #40546b; }
+#setup-status { margin: 12px 0 0; color: #9a2c22; min-height: 0; }
+#setup-status:empty { display: none; }
+footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+button { min-height: 44px; padding: 10px 20px; border-radius: 6px; border: 1px solid transparent; background: #2453a6; color: #fff; font: inherit; font-weight: 600; cursor: pointer; }
+button:hover:not(:disabled) { background: #193e80; }
+button.secondary { color: #183047; background: #fff; border-color: #8593a5; }
+button.secondary:hover { background: #edf1f7; }
+button:disabled { background: #dce2eb; color: #4a5b70; cursor: default; }
+:focus-visible { outline: 3px solid #2453a6; outline-offset: 3px; }
+::selection { color: #fff; background: #2453a6; }
+@media (max-width: 850px), (max-height: 700px) {
+  body { padding: 16px; }
+  main { padding: 24px; }
+  section, fieldset { margin-top: 20px; }
+}

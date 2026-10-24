@@ -27,9 +27,9 @@
       "sha256": "fdb6c705ddf2d9bcc613d2ca8aa2c30dcfda6880ca09df5a054b8ea77c06833a"
     },
     "plugin": {
-      "url": "https://codeload.github.com/gafapa/moodle-local_moodlia/zip/bac8761a8d157b830555576e6be23563b7b93db4",
-      "commit": "bac8761a8d157b830555576e6be23563b7b93db4",
-      "sha256": "0f8e66b625113519ea72424a07fe3c5e6e43441b13468a05ee98d7a83f50a722"
+      "url": "https://codeload.github.com/gafapa/moodle-local_moodlia/zip/c928228fb7ae5e59e1764843ecdd7d98e4613519",
+      "commit": "c928228fb7ae5e59e1764843ecdd7d98e4613519",
+      "sha256": "6c1ccfbfa987471ae65b177a8f5b97f09c1cc26f2dc3efe9b49c4c25693a83c9"
     },
     "postgres-win32-x64": {
       "url": "https://repo.maven.apache.org/maven2/io/zonky/test/postgres/embedded-postgres-binaries-windows-amd64/16.15.0/embedded-postgres-binaries-windows-amd64-16.15.0.jar",
@@ -91,6 +91,21 @@
     "php-linux-arm64": {
       "url": "https://dl.static-php.dev/static-php-cli/bulk/php-8.3.32-cli-linux-aarch64.tar.gz",
       "sha256": "4c29858ecfa30d93e854d17494f422b593afa6da8ec80ae979191e69604dc955"
+    },
+    "onetopic-5.1": {
+      "commit": "c7f8f4d80eb573e61dec9eb780dea0fd55eb553c",
+      "url": "https://codeload.github.com/davidherney/moodle-format_onetopic/zip/c7f8f4d80eb573e61dec9eb780dea0fd55eb553c",
+      "sha256": "7cbd15ac30075d1c26d049660f6414929a109afa191dd63f30b0866d29ba41fc"
+    },
+    "onetopic-4.5": {
+      "commit": "bb21cd6eb687365a00f8738181c15ac4f7d0a99a",
+      "url": "https://codeload.github.com/davidherney/moodle-format_onetopic/zip/bb21cd6eb687365a00f8738181c15ac4f7d0a99a",
+      "sha256": "c6206028d4d4bdc6967312da00d112233e796fb64076b3337408f2cf5657ea0c"
+    },
+    "onetopic-5.0": {
+      "commit": "ace97b5d8c02b0fd7d28b6b40bc975a4ec918e81",
+      "url": "https://codeload.github.com/davidherney/moodle-format_onetopic/zip/ace97b5d8c02b0fd7d28b6b40bc975a4ec918e81",
+      "sha256": "1b0b7d63094a2d1e15fb2af798ec849c30fd60aea53ebee22a05622b3e50be5a"
     }
   }
 }

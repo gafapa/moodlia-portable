@@ -2,6 +2,14 @@
 
 ## 0.1.0 — Unreleased
 
+- Add an English/Spanish setup screen for Moodle version and optional plugins.
+  Keep MoodlIA checked by default; offer pinned Onetopic builds on Moodle 4.5,
+  5.0 and 5.1, independently of MoodlIA. Reject incompatible selections in both
+  the desktop controller and backend, and preserve existing workspace choices.
+- Qualify optional plugin database/disk agreement and persisted selection on
+  native first installs and restarts. Keep the original course format until
+  the teacher explicitly selects Onetopic in a course.
+
 - Replace the removed Windows PHP download with PHP 8.3.36 and verify its
   publisher checksum. Pin the plugin source containing the 0.1.221 MCP fix.
 - Key build caches by digest and lock-refresh caches by source URL so an

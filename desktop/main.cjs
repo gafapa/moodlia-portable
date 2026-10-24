@@ -1,7 +1,9 @@
-const { app, BrowserWindow, dialog, Menu, shell } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Menu, shell } = require('electron');
 const { spawn } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
+const { pathToFileURL } = require('node:url');
+const { validateSelection } = require('./setup-model.cjs');
 
 let window;
 let backend;
@@ -19,7 +21,8 @@ app.on('second-instance', () => { if (window) { window.restore(); window.focus()
 
 async function start() {
   window = new BrowserWindow({ width: 1280, height: 900, minWidth: 800, minHeight: 600,
-    title: 'MoodlIA', webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true } });
+    title: 'MoodlIA', webPreferences: { nodeIntegration: false, contextIsolation: true, sandbox: true,
+      preload: path.join(__dirname, 'preload.cjs') } });
   await window.loadFile(path.join(__dirname, 'loading.html'));
   const menu = Menu.buildFromTemplate([
     { label: 'MoodlIA', submenu: [
@@ -38,17 +41,33 @@ async function start() {
   const arguments = ['--desktop', '--workspace', workspace];
   if (!fs.existsSync(path.join(workspace, 'data', 'config.json'))) {
     const versions = JSON.parse(fs.readFileSync(path.join(root, 'versions.json'), 'utf8'));
-    const selection = await dialog.showMessageBox(window, {
-      type: 'question', title: 'Create your local Moodle',
-      message: 'Choose a Moodle version',
-      detail: 'Use a version compatible with your destination Moodle. Your only account will be teacher, with administrator permissions. This choice applies to this workspace.',
-      buttons: [...versions.map(version => 'Moodle ' + version), 'Cancel'],
-      defaultId: 0, cancelId: versions.length,
-      checkboxLabel: 'Install MoodlIA plugin', checkboxChecked: true
+    const catalogPath = path.join(root, 'plugins.json');
+    const plugins = fs.existsSync(catalogPath) ? JSON.parse(fs.readFileSync(catalogPath, 'utf8')) : {};
+    const setupPath = path.join(__dirname, 'setup.html');
+    const setupUrl = pathToFileURL(setupPath).href;
+    const selection = await new Promise((resolve, reject) => {
+      const authorize = event => {
+        if (event.sender !== window.webContents || event.senderFrame !== window.webContents.mainFrame
+            || event.senderFrame.url !== setupUrl) throw new Error('Setup is available only in the local setup window.');
+      };
+      ipcMain.handle('portable:catalog', event => { authorize(event); return { versions, plugins }; });
+      ipcMain.handle('portable:start', (event, requested) => {
+        authorize(event);
+        const normalized = validateSelection(requested, versions, plugins);
+        resolve(normalized);
+        return { accepted: true };
+      });
+      ipcMain.handle('portable:cancel', event => { authorize(event); resolve(null); });
+      window.once('closed', () => resolve(null));
+      window.loadFile(setupPath).catch(reject);
+    }).finally(() => {
+      for (const channel of ['portable:catalog', 'portable:start', 'portable:cancel']) ipcMain.removeHandler(channel);
     });
-    if (selection.response === versions.length) { app.quit(); return; }
-    arguments.push('--moodle-version', versions[selection.response]);
-    if (!selection.checkboxChecked) arguments.push('--without-plugin');
+    if (!selection) { app.quit(); return; }
+    arguments.push('--moodle-version', selection.version);
+    if (!selection.moodlia) arguments.push('--without-plugin');
+    for (const component of selection.plugins) arguments.push('--plugin', component);
+    await window.loadFile(path.join(__dirname, 'loading.html'));
   }
   const executable = path.join(root, 'moodlia-backend' + (process.platform === 'win32' ? '.exe' : ''));
   backend = spawn(executable, arguments, { cwd: root, windowsHide: true, stdio: ['pipe', 'pipe', 'pipe'] });

@@ -12,3 +12,9 @@ The source lock records exact download origins and SHA-256 digests. SHA-256 lock
 - PyInstaller: GPL with its bootloader exception; frozen application licensing is permitted by that exception.
 
 Public release qualification includes notice review, source availability, platform signing/notarization, and a clean-machine install/uninstall test. Local runtime checks alone do not establish these distribution requirements.
+# Optional course format
+
+Onetopic (`format_onetopic`), by David Herney and contributors, is bundled under
+GPL v3 or later. Version-specific source commits and archive hashes are recorded
+in `sources.lock.json`; source and license files remain in the bundled copies.
+Upstream: https://github.com/davidherney/moodle-format_onetopic.

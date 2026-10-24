@@ -9,7 +9,8 @@
   "main": "desktop/main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "python -m unittest discover -s tests -v && node --check desktop/main.cjs",
+    "test": "python -m unittest discover -s tests -v && node --check desktop/main.cjs && node --check desktop/preload.cjs && node --check desktop/setup.js && node --test tests/setup.test.cjs",
+    "test:setup:browser": "node scripts/qualify-setup.mjs",
     "package": "electron-builder --publish never"
   },
   "devDependencies": {

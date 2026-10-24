@@ -1,0 +1,9 @@
+{
+  "format_onetopic": {
+    "name": "Onetopic",
+    "path": "course/format/onetopic",
+    "versions": ["4.5", "5.0", "5.1"],
+    "source": "https://github.com/davidherney/moodle-format_onetopic",
+    "source_prefix": "onetopic-"
+  }
+}
