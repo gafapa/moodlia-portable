@@ -15,6 +15,26 @@ The native workflow is provided under `.github/workflows/native.yml`; a workflow
 
 ## Execution record
 
+2026-10-24, first-launch selection update, local synthetic fixtures:
+
+- All 14 Python regression checks and both Node setup validation checks passed.
+- A real Chromium test exercised the setup page in English and Spanish at
+  1280×900 and 800×600: version selection, default MoodlIA selection, independent
+  Onetopic selection, incompatible-version disablement, validated submission and
+  absence of horizontal overflow. The bridge was synthetic; this browser test
+  does not install Moodle or replace native qualification.
+- Onetopic is pinned separately for Moodle 4.5, 5.0 and 5.1. Moodle 5.2/5.3
+  selections disable it because upstream has no declared compatible release.
+- Electron 44.9.3 and the refreshed dependency lock passed the complete npm
+  audit with zero known vulnerabilities. Windows PHP is pinned to 8.3.36 with
+  the official checksum. Unix static PHP remains 8.3.32 in the source lock;
+  this update does not claim that runtime has the newer PHP security fixes.
+
+The [native run for commit 872076b](https://github.com/gafapa/moodlia-portable/actions/runs/40130427440)
+qualifies the updated selection and runtime pins. Its final status and sanitized
+artifacts must be checked before distributing those packages. The earlier
+2026-10-20 native evidence below describes the previous implementation.
+
 2026-10-20, Windows 11 x64, local synthetic fixtures:
 
 - 11 unit/regression checks passed; `npm audit` reported zero known vulnerabilities.
