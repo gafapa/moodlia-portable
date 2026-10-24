@@ -31,8 +31,16 @@ The native workflow is provided under `.github/workflows/native.yml`; a workflow
   this update does not claim that runtime has the newer PHP security fixes.
 
 The [native run for commit 872076b](https://github.com/gafapa/moodlia-portable/actions/runs/40130427440)
-qualifies the updated selection and runtime pins. Its final status and sanitized
-artifacts must be checked before distributing those packages. The earlier
+completed successfully on all five targets: Windows x64, macOS Intel, macOS
+ARM64, Linux x64 and Linux ARM64. All 50 version/plugin/target combinations
+passed installation and persisted restart. Compatible MoodlIA-enabled cases
+also installed the selected Onetopic build. Packaging and artifact uploads
+passed on every target, and the Windows installer lifecycle passed. Packages
+and sanitized qualification summaries are attached to that run.
+
+These are unsigned preview artifacts. Native qualification does not remove the
+Unix PHP security-version limit above, establish clean-machine compatibility,
+or replace signing/notarization and notice-review release gates. The earlier
 2026-10-20 native evidence below describes the previous implementation.
 
 2026-10-20, Windows 11 x64, local synthetic fixtures:

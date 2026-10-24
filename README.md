@@ -34,6 +34,12 @@ reuse an older binary under the same cache name. Existing workspaces are retaine
 Electron is pinned to 44.9.3 and the refreshed complete dependency audit reports
 zero vulnerabilities.
 
+The [24 October native run](https://github.com/gafapa/moodlia-portable/actions/runs/40130427440)
+passed all five targets and all 50 Moodle/plugin/target combinations, including
+packaging and the Windows installer lifecycle. Download its preview artifacts
+from GitHub Actions. They are unsigned; see the runtime and distribution limits
+in [the validation record](docs/VALIDATION.md).
+
 ## Getting started
 
 ### Application packages
