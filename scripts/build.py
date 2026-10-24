@@ -45,7 +45,7 @@ def extract_zip(path, destination, strip_root=False):
 
 def download(key, sources):
     spec = sources[key]
-    cache = ROOT / '.cache' / key
+    cache = ROOT / '.cache' / (key + '-' + spec['sha256'])
     cache.parent.mkdir(exist_ok=True)
     if not cache.exists():
         temporary = cache.with_suffix('.part')

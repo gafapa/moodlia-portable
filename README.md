@@ -14,6 +14,11 @@ The **Install MoodlIA plugin** option is checked by default. With the plugin, co
 
 Implemented desktop application and native packaging workflow. Platform instructions are not proof of signing, notarization or native qualification; consult the validation record before distribution.
 
+Windows builds pin PHP 8.3.36 using the official publisher checksum. The plugin
+source is pinned to the 0.1.221 candidate with the strict MCP catalog fix.
+Download caches are keyed by their locked digest so refreshing a runtime cannot
+reuse an older binary under the same cache name. Existing workspaces are retained.
+
 ## Getting started
 
 ### Application packages

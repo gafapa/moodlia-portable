@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import io
 import ipaddress
 import json
@@ -16,10 +17,32 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
 sys.path.insert(0, str(ROOT / 'scripts'))
 from portable import PortableMoodle, private_write, instance_lock
-from build import extract_zip, extract_tar
+from build import download, extract_zip, extract_tar
 
 
 class PortableTests(unittest.TestCase):
+    def test_refreshed_download_preserves_old_cache_and_checks_new_bytes(self):
+        import build
+
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / '.cache').mkdir()
+            legacy = root / '.cache' / 'php-test'
+            legacy.write_bytes(b'previous locked runtime')
+            content = b'new locked runtime'
+            digest = hashlib.sha256(content).hexdigest()
+            sources = {'php-test': {'url': 'https://example.invalid/php.zip', 'sha256': digest}}
+            with patch.object(build, 'ROOT', root), patch.object(build.urllib.request, 'urlopen',
+                    return_value=io.BytesIO(content)) as request:
+                target = download('php-test', sources)
+                self.assertEqual(target.read_bytes(), content)
+                self.assertEqual(legacy.read_bytes(), b'previous locked runtime')
+                self.assertEqual(download('php-test', sources), target)
+                request.assert_called_once()
+                target.write_bytes(b'damaged cached archive')
+                with self.assertRaisesRegex(RuntimeError, 'SHA-256 mismatch'):
+                    download('php-test', sources)
+
     def test_child_processes_cannot_consume_desktop_control_input(self):
         with tempfile.TemporaryDirectory() as folder:
             application = PortableMoodle(folder)

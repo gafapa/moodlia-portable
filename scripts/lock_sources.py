@@ -30,7 +30,7 @@ def specifications():
         # Official release distributions include the production Composer dependencies.
         result['moodle-' + version] = {'url': f'https://download.moodle.org/download.php/direct/stable{branch}/moodle-{filename}.zip',
                                       'release_commit': commit}
-    commit = '44c38c41d1fef9dd8c335829cc5f09a8a5b8c92c'
+    commit = 'bac8761a8d157b830555576e6be23563b7b93db4'
     result['plugin'] = {'url': f'https://codeload.github.com/gafapa/moodle-local_moodlia/zip/{commit}', 'commit': commit}
     for target, (classifier, php_target) in TARGETS.items():
         version = '16.15.0'
@@ -41,8 +41,8 @@ def specifications():
         if php_target:
             result['php-' + target] = {'url': f'https://dl.static-php.dev/static-php-cli/bulk/php-8.3.32-cli-{php_target}.tar.gz'}
         else:
-            result['php-' + target] = {'url': 'https://downloads.php.net/~windows/releases/php-8.3.35-nts-Win32-vs16-x64.zip',
-                'expected_sha256': '25a8e2ac9ff30f1d768d1447c09a600617fa6e6082729f6e95f008b59c91fe45'}
+            result['php-' + target] = {'url': 'https://downloads.php.net/~windows/releases/php-8.3.36-nts-Win32-vs16-x64.zip',
+                'expected_sha256': '3c9242622c7402b47c38d2ec2ed779cef3a290fd6f2bde6c35f9c482699e7900'}
     return result
 
 
@@ -50,7 +50,8 @@ def lock_item(item):
     key, spec = item
     cache = ROOT / '.cache'
     cache.mkdir(exist_ok=True)
-    path = cache / key
+    source_id = hashlib.sha256(spec['url'].encode()).hexdigest()[:16]
+    path = cache / (key + '-' + source_id)
     if not path.exists():
         print('Downloading ' + key, flush=True)
         request = urllib.request.Request(spec['url'], headers={'User-Agent': 'MoodlIA-Portable-Builder/0.1 (+https://moodlia.com)'})
