@@ -2,6 +2,9 @@
 
 ## 0.1.0 — Unreleased
 
+- Update Electron to 44.9.3 and compatible transitive dependencies; the complete
+  dependency audit reports zero vulnerabilities.
+
 - Add an English/Spanish setup screen for Moodle version and optional plugins.
   Keep MoodlIA checked by default; offer pinned Onetopic builds on Moodle 4.5,
   5.0 and 5.1, independently of MoodlIA. Reject incompatible selections in both

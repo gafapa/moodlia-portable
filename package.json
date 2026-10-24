@@ -14,7 +14,7 @@
     "package": "electron-builder --publish never"
   },
   "devDependencies": {
-    "electron": "44.9.0",
+    "electron": "44.9.3",
     "electron-builder": "26.15.3",
     "playwright": "1.64.1"
   },
@@ -40,7 +40,9 @@
     "artifactName": "MoodlIA-${version}-${os}-${arch}.${ext}",
     "win": {
       "icon": "desktop/icon.ico",
-      "target": ["nsis"]
+      "target": [
+        "nsis"
+      ]
     },
     "nsis": {
       "include": "installer/safety.nsh",

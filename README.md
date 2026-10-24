@@ -31,6 +31,8 @@ Windows builds pin PHP 8.3.36 using the official publisher checksum. The plugin
 source is pinned to the 0.1.221 candidate with the strict MCP catalog fix.
 Download caches are keyed by their locked digest so refreshing a runtime cannot
 reuse an older binary under the same cache name. Existing workspaces are retained.
+Electron is pinned to 44.9.3 and the refreshed complete dependency audit reports
+zero vulnerabilities.
 
 ## Getting started
 
